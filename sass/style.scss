@@ -1,0 +1,913 @@
+@charset "utf-8";
+
+/*================================
+mixin
+===============================*/
+// レイアウト幅
+$layout-width-inner: 1200px;
+
+// ブレークポイント
+$breakpoints: (
+  "sp": "screen and (max-width: 767px)",
+  "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
+  "pc": "screen and (min-width: #{$layout-width-inner})",
+);
+
+// メディアクエリー
+@mixin mq($breakpoint: pc) {
+  @media #{map-get($breakpoints, $breakpoint)} {
+    @content;
+  }
+}
+
+/*================================
+font
+===============================*/
+$font-en: "Krona One", sans-serif;
+
+@import url("https://fonts.googleapis.com/css2?family=Krona+One&display=swap");
+
+/*================================
+color
+===============================*/
+
+$font-color: #333;
+
+/*================================
+common - 共通スタイル
+===============================*/
+
+@include mq(sp) {
+  .is-pc {
+    display: none;
+  }
+}
+
+@include mq(pc) {
+  .is-sp {
+    display: none;
+  }
+}
+
+/*================================
+base
+===============================*/
+
+html {
+  overflow: auto;
+}
+body {
+  overflow: hidden;
+}
+
+body {
+  font-family: "游ゴシック体", YuGothic, "游ゴシック Medium", "Yu Gothic Medium",
+    "游ゴシック", "Yu Gothic", sans-serif;
+  line-height: 1.5;
+  font-size: 16px;
+  color: $font-color;
+}
+img {
+  width: 100%;
+}
+a {
+  transition: all 0.3s ease 0s;
+}
+
+.inner {
+  width: $layout-width-inner;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 40px;
+
+  @include mq(sp) {
+    padding: 0 20px;
+  }
+}
+
+/*================================
+shutter
+===============================*/
+
+.shutter {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  background-color: #333;
+  z-index: 10000;
+}
+.shutter::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  margin: auto;
+  background-color: #fff;
+}
+/* end@shutter */
+
+/* @shutter anime */
+.shutter {
+  animation: shutterClose 2.6s forwards 1;
+}
+.shutter::before {
+  animation: shutterOpen 2.6s forwards 1;
+}
+
+@keyframes shutterClose {
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    display: none;
+    z-index: -1;
+  }
+}
+@keyframes shutterOpen {
+  0% {
+    width: 0;
+    height: 2px;
+  }
+  50% {
+    width: 100%;
+    height: 2px;
+  }
+  90% {
+    width: 100%;
+    height: 100%;
+  }
+  100% {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+/*================================
+header
+===============================*/
+header {
+  height: 80px;
+  width: 100%;
+  //位置固定
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  background: rgba(#000, 0.16);
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  height: inherit;
+}
+.header-logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+  font-family: $font-en;
+
+  @include mq(tab) {
+    font-size: 18px;
+  }
+}
+.header-nav {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+
+  li {
+    color: #fff;
+    font-family: $font-en;
+
+    @include mq(sp) {
+      display: none;
+    }
+
+    &:not(:first-child) {
+      margin-left: 30px;
+      color: #fff;
+    }
+
+    a {
+      font-size: 16px;
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+  }
+}
+
+/*================================
+drawer
+===============================*/
+.drawer-icon {
+  position: fixed;
+  top: 30px;
+  right: 58px;
+  z-index: 20000;
+  display: none;
+  transition: transform 0.5s ease 0s;
+
+  @include mq("sp") {
+    display: block;
+    right: 20px;
+  }
+
+  &.is-active {
+    transform: translateX(0);
+    .drawer-icon-bar1 {
+      transform: rotate(-45deg);
+      top: 8px;
+    }
+    .drawer-icon-bar2 {
+      display: none;
+    }
+    .drawer-icon-bar3 {
+      transform: rotate(45deg);
+      top: 8px;
+    }
+  }
+}
+.drawer-icon-bars {
+  width: 22px;
+  height: 20px;
+  display: block;
+  position: relative;
+}
+.drawer-icon-bar1,
+.drawer-icon-bar2,
+.drawer-icon-bar3 {
+  position: absolute;
+  width: 22px;
+  height: 3px;
+  background: #fff;
+  top: 0;
+  left: 0;
+}
+
+.drawer-icon-bar1 {
+  top: 0;
+}
+.drawer-icon-bar2 {
+  top: 8px;
+}
+.drawer-icon-bar3 {
+  top: 16px;
+}
+
+.drawer-content {
+  width: 380px;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  right: 0;
+  background: rgba(#333, 0.9);
+  box-shadow: 0 0 3px rgba(#000, 0.16);
+  z-index: 18000;
+  transform: translateX(105%);
+  transition: transform 0.5s ease 0s;
+  padding-top: 200px;
+
+  &.is-active {
+    transform: translateX(0);
+  }
+}
+.rawer-content-items {
+}
+.drawer-content-item {
+  text-align: center;
+
+  a {
+    display: block;
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 20px;
+    border-bottom: 1px dotted #fff;
+    width: 300px;
+    margin-left: 40px;
+  }
+}
+
+.drawer-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(#000, 0.7);
+  z-index: 16;
+  display: none;
+
+  &.is-active {
+    display: block;
+  }
+}
+
+/*================================
+top
+===============================*/
+.top {
+}
+.top-inner {
+  width: 100%;
+  height: 100vh;
+}
+
+.top-body {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+}
+.top-title {
+  font-size: 55px;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  text-shadow: 3px 3px 6px rgba(255, 255, 255, 0.3);
+
+  @include mq(sp) {
+    font-size: 36px;
+  }
+}
+.top-button {
+  width: 300px;
+  display: block;
+  margin: 0 auto;
+  padding: 20px 40px;
+  background: #fff;
+  color: $font-color;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 50px;
+  box-shadow: 3px 3px 6px rgba(255, 255, 255, 0.3);
+  margin-top: 30px;
+
+  &:hover {
+    background: $font-color;
+    color: #fff;
+  }
+}
+
+/*================================
+top-scroll
+===============================*/
+.top-scroll {
+  z-index: 3;
+  /*描画位置※位置は適宜調整してください*/
+  position: absolute;
+  bottom: 1%;
+  right: 50%;
+  /*矢印の動き1秒かけて永遠にループ*/
+  animation: arrowmove 1s ease-in-out infinite;
+}
+
+/*下からの距離が変化して全体が下→上→下に動く*/
+@keyframes arrowmove {
+  0% {
+    bottom: 1%;
+  }
+  50% {
+    bottom: 3%;
+  }
+  100% {
+    bottom: 1%;
+  }
+}
+
+/*Scrollテキストの描写*/
+.top-scroll span {
+  /*描画位置*/
+  position: absolute;
+  left: -20px;
+  bottom: 10px;
+  /*テキストの形状*/
+  color: #eee;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  /*縦書き設定*/
+  -ms-writing-mode: tb-rl;
+  -webkit-writing-mode: vertical-rl;
+  writing-mode: vertical-rl;
+}
+
+/* 矢印の描写 */
+.top-scroll:before {
+  content: "";
+  /*描画位置*/
+  position: absolute;
+  bottom: 0;
+  right: -6px;
+  /*矢印の形状*/
+  width: 1px;
+  height: 20px;
+  background: #eee;
+  transform: skewX(-31deg);
+}
+
+.top-scroll:after {
+  content: "";
+  /*描画位置*/
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  /*矢印の形状*/
+  width: 1px;
+  height: 50px;
+  background: #eee;
+}
+/*================================
+sction(共通コース)
+===============================*/
+
+/*================================
+about
+===============================*/
+.about {
+  height: 500px;
+  width: 100%;
+  padding: 120px 0 60px;
+
+  @include mq(tab) {
+    margin-bottom: 200px;
+  }
+
+  @include mq(sp) {
+    margin-bottom: 420px;
+  }
+}
+.about-inner {
+}
+.about-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @include mq(sp) {
+    flex-direction: column;
+  }
+}
+.about-left {
+  width: 30%;
+  margin-right: 20%;
+
+  @include mq(tab) {
+    width: 30%;
+    margin-right: 10%;
+  }
+
+  @include mq(sp) {
+    width: 100%;
+    margin-right: 0;
+  }
+  img {
+    border-radius: 50%;
+  }
+}
+.about-right {
+  width: 50%;
+  padding-top: 20px;
+
+  @include mq(tab) {
+    width: 50%;
+    padding-top: 0;
+  }
+
+  @include mq(sp) {
+    width: 100%;
+    padding-top: 0;
+    margin-top: 50px;
+  }
+}
+.about-title {
+  font-size: 60px;
+  font-weight: bold;
+  position: relative;
+  font-family: $font-en;
+
+  &::after {
+    content: "自己紹介";
+    display: inline-block;
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 16%;
+    transform: translateY(-50%);
+    color: #fff;
+
+    @include mq(tab) {
+      left: 24%;
+    }
+
+    @include mq(sp) {
+      left: 22%;
+    }
+  }
+}
+.about-text {
+  color: #fff;
+  line-height: 3.5;
+
+  span {
+    border-bottom: 1px solid #1a1a1a;
+    padding-bottom: 20px;
+  }
+}
+.about-sns {
+  width: 25px;
+  margin-left: 15px;
+  padding-bottom: 15px;
+}
+/*================================
+skill
+===============================*/
+.skill {
+  width: 100%;
+  padding: 120px 0 60px;
+}
+.skill-title {
+  font-size: 60px;
+  font-weight: bold;
+  position: relative;
+  font-family: $font-en;
+  text-align: center;
+
+  &::after {
+    content: "スキル";
+    display: inline-block;
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 48%;
+    transform: translateY(-50%);
+    color: #fff;
+
+    @include mq(sp) {
+      left: 45%;
+    }
+  }
+}
+.skill-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  text-align: center;
+  margin-top: 30px;
+
+  @include mq(sp) {
+    flex-direction: column;
+  }
+}
+.skill-item {
+  width: 30%;
+  padding: 32px;
+  background: #1a1a1a;
+  box-shadow: 3px 3px 6px rgba(255, 255, 255, 0.6);
+
+  @include mq(tab) {
+    width: 45%;
+  }
+
+  @include mq(sp) {
+    width: 100%;
+  }
+
+  &:nth-child(n + 4) {
+    margin-top: 50px;
+  }
+
+  @include mq(tab) {
+    &:nth-child(n + 1) {
+      margin-top: 30px;
+    }
+  }
+
+  @include mq(sp) {
+    &:nth-child(n + 1) {
+      margin-top: 30px;
+    }
+  }
+}
+.skill-image {
+  width: 100px;
+}
+.skill-text {
+  color: #fff;
+  margin-top: 10px;
+  font-size: 24px;
+  font-family: $font-en;
+}
+
+/*================================
+service
+===============================*/
+.service {
+  width: 100%;
+  padding: 120px 0 60px;
+  margin-bottom: 180px;
+
+  @include mq(sp) {
+    padding: 60px 0;
+  }
+}
+.service-heading-title {
+  font-size: 60px;
+  font-weight: bold;
+  position: relative;
+  font-family: $font-en;
+  text-align: center;
+
+  &::after {
+    content: "サービス内容";
+    display: inline-block;
+    font-size: 20px;
+    position: absolute;
+    top: 53%;
+    left: 45%;
+    transform: translateY(-50%);
+    color: #fff;
+
+    @include mq(tab) {
+      left: 42%;
+    }
+
+    @include mq(sp) {
+      left: 32%;
+    }
+  }
+}
+.service-wrapper {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  margin-top: 30px;
+
+  @include mq(sp) {
+    flex-direction: column;
+  }
+}
+.service-item {
+  width: 30%;
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 3px 3px 6px rgba(255, 255, 255, 0.6);
+
+  &:nth-child(2) {
+    margin-top: 60px;
+    margin-bottom: -60px;
+  }
+
+  &:nth-child(3) {
+    margin-top: 120px;
+    margin-bottom: -120px;
+  }
+
+  @include mq(sp) {
+    width: 100%;
+    margin-top: 30px;
+  }
+}
+.service-image {
+  width: 100px;
+}
+.service-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+.service-text {
+  font-size: 16px;
+  margin-top: 10px;
+  text-align: left;
+}
+
+/*================================
+works
+===============================*/
+.works-title {
+  font-size: 60px;
+  font-weight: bold;
+  position: relative;
+  font-family: $font-en;
+  text-align: center;
+  margin-bottom: 20px;
+
+  &::after {
+    content: "私の作品";
+    display: inline-block;
+    font-size: 20px;
+    position: absolute;
+    top: 53%;
+    left: 47%;
+    transform: translateY(-50%);
+    color: #fff;
+
+    @include mq(tab) {
+      left: 43%;
+    }
+
+    @include mq(sp) {
+      left: 40%;
+    }
+  }
+}
+
+/*================================
+contact
+===============================*/
+.contact {
+  padding: 120px 0;
+}
+.contact-forms {
+  width: 700px;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 80px 50px;
+
+  @include mq("sp") {
+    padding: 0;
+  }
+}
+.contact-head-title {
+  font-size: 60px;
+  font-weight: bold;
+  position: relative;
+  font-family: $font-en;
+  text-align: center;
+  margin-bottom: 20px;
+  color: $font-color;
+
+  &::after {
+    content: "お問い合わせ";
+    display: inline-block;
+    font-size: 20px;
+    position: absolute;
+    top: 53%;
+    left: 45%;
+    transform: translateY(-50%);
+    color: #fff;
+
+    @include mq("tab") {
+      left: 43%;
+    }
+
+    @include mq(sp) {
+      left: 36%;
+    }
+  }
+}
+.contact-form-row {
+  &:not(:first-child) {
+    margin-top: 25px;
+  }
+}
+
+.contact-form-label {
+  width: 160px;
+  padding-bottom: 5px;
+  color: #fff;
+
+  label {
+    font-weight: bold;
+  }
+}
+.contact-form-input {
+  font-size: 16px;
+  letter-spacing: 0.05em;
+
+  [type="text"] {
+    border: 1px solid #fff;
+    padding: 8px 16px;
+    font-size: 14px;
+    width: 100%;
+    background: #fff;
+
+    &:hover {
+      border-color: tomato;
+    }
+  }
+  [type="email"] {
+    border: 1px solid #fff;
+    padding: 8px 16px;
+    font-size: 14px;
+    width: 100%;
+    background: #fff;
+
+    &:hover {
+      border-color: tomato;
+    }
+  }
+  textarea {
+    height: 170px;
+    border: 1px solid #fff;
+    padding: 12px 16px;
+    font-size: 14px;
+    width: 100%;
+    background: #fff;
+
+    &:hover {
+      border-color: tomato;
+    }
+  }
+}
+
+.contact-button {
+  margin-top: 50px;
+  text-align: center;
+
+  [type="submit"] {
+    display: inline-block;
+    background: #fff;
+    color: #333;
+    font-weight: bold;
+    width: 235px;
+    padding: 20px;
+    border-radius: 50px;
+    box-shadow: 3px 3px 6px rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+
+    &:hover,
+    &:not(.-submit) {
+      background: #333;
+      color: #fff;
+    }
+  }
+}
+
+.contact-message {
+  text-align: center;
+  margin-top: 60px;
+  display: none;
+  color: #fff;
+  font-size: 24px;
+
+  &.-error {
+    color: #f00;
+  }
+}
+
+/*================================
+footer
+===============================*/
+.footer {
+  position: relative;
+}
+.copyright {
+  position: absolute;
+  bottom: 10px;
+  left: 45%;
+  font-size: 12px;
+  text-align: center;
+  color: #333;
+  font-family: $font-en;
+
+  @include mq(sp) {
+    font-size: 10px;
+    left: 36%;
+  }
+}
+
+/*================================
+ページTOPに戻る
+===============================*/
+.to-top {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease 0s;
+
+  @include mq("sp") {
+    right: 12px;
+    bottom: 12px;
+  }
+
+  &.is-show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  a {
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  img {
+    width: 50px;
+
+    @include mq("sp") {
+      width: 30px;
+    }
+  }
+}
